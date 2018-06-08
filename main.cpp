@@ -29,10 +29,16 @@ AdafruitIO_Feed *mytwcolor = io.feed("twcolor");
 AdafruitIO_Feed *mybrightness = io.feed("brightness");
 int select = TWINK;
 int old_select;
-byte peak_blue, peak_red, peak_green;
+byte peak_blue = 0x80;
+byte peak_red = 0x80;
+byte peak_green = 0x80;
 int setbright = 128; // half bright to start
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
+// Static IP = 192.168.1.140
+IPAddress ip(192,168,1,140);
+IPAddress gateway(192,168,1,1);
+IPAddress subnet(255,255,255,0);
 
 void setup() {
   LEDS.setBrightness(255);
@@ -46,9 +52,10 @@ void setup() {
   WiFi.begin(ssid, password);
   DPRINTLN("WiFi failed, retrying.");
   }
-  DPRINTLN("WiFi connected");
-  DPRINTLN("IP address: ");
-  DPRINTLN(WiFi.localIP());
+  WiFi.config(ip, gateway, subnet);
+  DPRINTLN_L("WiFi connected");
+  DPRINT_L("IP address: ");
+  DPRINTLN_L(WiFi.localIP());
   MDNS.begin(host);
 
   httpUpdater.setup(&httpServer);
@@ -146,7 +153,10 @@ void loop() {
     twinkle();
   }
   if (select != old_select) {
-    LEDS.showColor(CRGB::Black); // all off
+    FastLED.clear();
+   for (int led = 0; led < NUM_LEDS; led++) {
+     leds[led] = CRGB::Black;
+   }
     delay(1000);
     old_select = select;
   }

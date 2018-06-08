@@ -32,8 +32,8 @@ void onoffinit() {
   // 2. Switch off every 20 leds
   for (byte i = 0; i < NUM_LEDS;)
   {
-    for (byte j = 0; j < 20; j++)
-      leds[j + 20 + i] = CRGB(0, 0, 0);
-    i += 40;
+    for (byte j = 0; j < BLOCKSIZE; j++)
+      leds[j + BLOCKSIZE + i] = CRGB(0, 0, 0);
+    i += (2 * BLOCKSIZE);
   }
 }

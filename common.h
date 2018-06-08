@@ -4,8 +4,8 @@ const int DATA_PIN = D4;
 const int NUM_LEDS = 240;
 extern CRGB leds[];
 enum {
-  COMETS,
-  CYLON,
+  COMETS = 1, // we want to omit 0
+  CYLON, // = 2
   MIDOUT,
   ONOFF,
   TWINK,
@@ -14,8 +14,9 @@ enum {
   SHRBW,
   SHRGB,
   WGHTSH,
-  NOISE
+  NOISE // = 11
 };
+
 // HTTP update definitions
-static const char* host = "esp8266-webupdate";
+static const char* host = "wemos-leds";
 #endif
